@@ -1,52 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>奥武蔵ウルトラマラソン70kmゴール予測時刻</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>奥武蔵ウルトラマラソン70km</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f5f7f8; color: #1f2937;
-  }
-  .app { max-width: 680px; margin: 0 auto; }
-  h1 { font-size: 25px; line-height: 1.4; text-align: center; margin: 8px 0 20px; }
-  .card {
-    background: white; border: 1px solid #d8dee4; border-radius: 16px;
-    padding: 20px; margin-bottom: 16px;
-  }
-  .distance { text-align:center; font-size:18px; margin-bottom:20px; }
-  .distance strong { font-size:30px; }
-  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  label, legend { font-weight: 700; display:block; margin-bottom:7px; }
-  input, select {
-    width:100%; min-height:50px; border:1px solid #b8c0c8; border-radius:10px;
-    padding:10px 12px; font-size:18px; background:#fff;
-  }
-  .time24 { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; }
-  .time24 span { font-size:24px; font-weight:800; text-align:center; }
-  .pace { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-  .unit { display:flex; align-items:center; gap:6px; }
-  .unit span { white-space:nowrap; }
-  button {
-    width:100%; min-height:54px; margin-top:20px; border:0; border-radius:12px;
-    font-size:18px; font-weight:700; background:#166534; color:white; cursor:pointer;
-  }
-  .result { text-align:center; background:#ecfdf3; border-color:#a7d7b5; }
-  .result-label { font-size:16px; color:#4b5563; }
-  #goal { font-size:50px; font-weight:800; margin:8px 0; }
-  .details { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px; }
-  .detail { padding:12px; background:white; border-radius:10px; }
-  .detail small { display:block; color:#6b7280; margin-bottom:4px; }
-  #error { color:#b91c1c; font-weight:700; margin-top:12px; display:none; }
-  .note { color:#6b7280; font-size:13px; line-height:1.6; }
-  @media (max-width: 520px) {
-    body { padding:12px; }
-    h1 { font-size:21px; }
-    .grid { grid-template-columns:1fr; }
-    #goal { font-size:44px; }
-  }
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17202a;background:#f5f7f8}body{margin:0;padding:16px}.wrap{max-width:720px;margin:auto}.hero,.card{background:#fff;border:1px solid #dfe5e8;border-radius:16px;padding:16px;margin-bottom:14px}.hero h1{font-size:22px;margin:0 0 10px}.meta{display:flex;gap:10px;flex-wrap:wrap}.pill{background:#eef3f5;border-radius:999px;padding:8px 12px;font-weight:700}.result{text-align:center}.result .time{font-size:42px;font-weight:800;margin:6px 0}.ok{color:#16734a}.late{color:#b42318}.muted{color:#65727c;font-size:14px}.row{display:grid;grid-template-columns:72px 1fr 118px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid #edf0f2}.row:last-child{border-bottom:0}.km{font-weight:800}.place{min-width:0}.place small{display:block;color:#65727c}select{box-sizing:border-box;font-size:16px;padding:10px 6px;border:1px solid #b9c2c8;border-radius:10px;background:white}.time24{display:grid;grid-template-columns:1fr auto 1fr;gap:4px;align-items:center}.time24 span{font-weight:800}button{min-height:44px;border:0;border-radius:12px;padding:10px 14px;font-size:16px;font-weight:700;cursor:pointer}.clear{background:#e9eef1;color:#27343c;width:100%;margin-top:12px}.hint{font-size:13px;color:#65727c;margin:8px 0 0}@media(max-width:420px){body{padding:10px}.row{grid-template-columns:60px 1fr 108px}.result .time{font-size:36px}}
 </style>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
@@ -55,144 +14,45 @@
 <meta name="theme-color" content="#075f3c">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="奥武蔵ウルトラ70km">
+<meta name="apple-mobile-web-app-title" content="奥武蔵ウルトラマラソン70km">
 </head>
 <body>
-<main class="app">
-  <h1>奥武蔵ウルトラマラソン70kmゴール予測時刻</h1>
-
-  <section class="card">
-    <div class="distance">レース距離<br><strong>70 km</strong></div>
-
-    <form id="form">
-      <div class="grid">
-        <div>
-          <label for="start">① スタート時刻</label>
-          <div class="time24"><select id="startHour" aria-label="スタート時"></select><span>:</span><select id="startMinute" aria-label="スタート分"></select></div>
-        </div>
-
-        <div>
-          <label for="distance">② 現在地距離（km）</label>
-          <input id="distance" type="number" min="0" max="70" step="0.1" value="30" required>
-        </div>
-
-        <div>
-          <label for="current">③ 現在地時刻</label>
-          <div class="time24"><select id="currentHour" aria-label="現在時"></select><span>:</span><select id="currentMinute" aria-label="現在分"></select></div>
-        </div>
-
-        <div>
-          <label>④ スタート地点から現在地点までの平均ペース</label>
-          <div class="pace">
-            <div class="unit"><input id="paceMin" type="number" min="0" value="10" required><span>分/km</span></div>
-            <div class="unit"><input id="paceSec" type="number" min="0" max="59" value="0" required><span>秒/km</span></div>
-          </div>
-        </div>
-      </div>
-      <div id="error"></div>
-      <button type="submit">ゴール予測時刻を計算</button>
-    </form>
-  </section>
-
-  <section class="card result" aria-live="polite">
-    <div class="result-label">ゴール予測時刻</div>
-    <div id="goal">18:40</div>
-    <div id="day">当日ゴール予測</div>
-    <div class="details">
-      <div class="detail"><small>残り距離</small><strong id="remainingKm">40.0 km</strong></div>
-      <div class="detail"><small>残り時間</small><strong id="remainingTime">6時間40分</strong></div>
-    </div>
-  </section>
-
-  <p class="note">現在地から70km地点まで、入力した平均ペースがそのまま続くものとして計算します。</p>
+<main class="wrap">
+<section class="hero">
+<h1>奥武蔵ウルトラマラソン70km</h1>
+<div class="meta"><span class="pill">スタート 7:00</span><span class="pill">ゴール関門 18:00</span></div>
+<p class="hint">通過したエイドの到着時刻を入力してください。最も距離が進んだ入力地点までの平均ペース（休憩込み）で、70kmの予測ゴール時刻を計算します。</p>
+</section>
+<section class="card result" aria-live="polite">
+<div class="muted">予測ゴール時刻</div><div id="goal" class="time">--:--</div><div id="status" class="muted">エイドの到着時刻を入力してください</div>
+</section>
+<section class="card" id="aidList"></section>
+<button id="clear" class="clear" type="button">入力をすべてクリア</button>
 </main>
-
 <script>
-(function () {
-  const TOTAL_KM = 70;
-  const form = document.getElementById("form");
-  const startHour = document.getElementById("startHour");
-  const startMinute = document.getElementById("startMinute");
-  const distance = document.getElementById("distance");
-  const currentHour = document.getElementById("currentHour");
-  const currentMinute = document.getElementById("currentMinute");
-  const paceMin = document.getElementById("paceMin");
-  const paceSec = document.getElementById("paceSec");
-  const goal = document.getElementById("goal");
-  const day = document.getElementById("day");
-  const remainingKm = document.getElementById("remainingKm");
-  const remainingTime = document.getElementById("remainingTime");
-  const error = document.getElementById("error");
-
-  function fillTimeSelects() {
-    for (let h=0; h<24; h++) {
-      const v=String(h).padStart(2,"0");
-      startHour.add(new Option(v,v)); currentHour.add(new Option(v,v));
-    }
-    for (let m=0; m<60; m++) {
-      const v=String(m).padStart(2,"0");
-      startMinute.add(new Option(v,v)); currentMinute.add(new Option(v,v));
-    }
-    startHour.value="07"; startMinute.value="00";
-    currentHour.value="12"; currentMinute.value="00";
-  }
-  function selectedMinutes(h,m) { return Number(h.value)*60 + Number(m.value); }
-  function clock(total) {
-    const n = Math.round(total);
-    const m = ((n % 1440) + 1440) % 1440;
-    return String(Math.floor(m / 60)).padStart(2,"0") + ":" + String(m % 60).padStart(2,"0");
-  }
-  function duration(mins) {
-    const n = Math.max(0, Math.round(mins));
-    return Math.floor(n / 60) + "時間" + String(n % 60).padStart(2,"0") + "分";
-  }
-  function calculate() {
-    error.style.display = "none";
-    let s = selectedMinutes(startHour, startMinute);
-    let now = selectedMinutes(currentHour, currentMinute);
-    const d = Number(distance.value);
-    const pm = Number(paceMin.value);
-    const ps = Number(paceSec.value);
-
-    if (!Number.isFinite(d) || d < 0 || d > TOTAL_KM ||
-        !Number.isFinite(pm) || pm < 0 || !Number.isFinite(ps) || ps < 0 || ps > 59 ||
-        (pm === 0 && ps === 0)) {
-      error.textContent = "入力内容を確認してください。";
-      error.style.display = "block";
-      return;
-    }
-
-    if (now < s) now += 1440;
-    const pace = pm + ps / 60;
-    const leftKm = TOTAL_KM - d;
-    const leftMinutes = leftKm * pace;
-    const finish = now + leftMinutes;
-
-    goal.textContent = clock(finish);
-    remainingKm.textContent = leftKm.toFixed(1) + " km";
-    remainingTime.textContent = duration(leftMinutes);
-
-    const dayOffset = Math.floor(finish / 1440) - Math.floor(s / 1440);
-    day.textContent = dayOffset > 0 ? "翌日（+" + dayOffset + "日）" : "当日ゴール予測";
-  }
-
-  fillTimeSelects();
-  form.addEventListener("submit", function(e) { e.preventDefault(); calculate(); });
-  [startHour, startMinute, distance, currentHour, currentMinute, paceMin, paceSec].forEach(function(el) {
-    el.addEventListener("input", calculate);
-    el.addEventListener("change", calculate);
-  });
-  calculate();
+(()=>{
+const aids=[
+[4.2,'阿諏訪AS①'],[8.8,'滝ノ入AS①'],[13.8,'桂木AS'],[17.6,'滝ノ入AS②'],[22.2,'阿諏訪AS②'],
+[23.5,'鎌北湖第2駐車場','関門 10:35'],[25.5,'清流AS①'],[28.2,'ユガテAS①'],[31.1,'黒山AS①'],[35.5,'阿寺AS①'],
+[36.8,'見晴台AS①'],[38.9,'高山AS①'],[42.0,'飯盛AS①'],[45.4,'刈場坂AS','関門 14:10／折返し'],[48.7,'飯盛AS②'],
+[51.8,'高山AS②','関門 15:00'],[53.9,'見晴台AS②'],[57.2,'阿寺AS②'],[59.6,'黒山AS②'],[62.5,'ユガテAS②','関門 16:50'],[65.2,'清流AS②','関門 17:20']
+];
+const start=7*60, cutoff=18*60, total=70;
+const list=document.getElementById('aidList');
+aids.forEach((a,i)=>{const r=document.createElement('div');r.className='row';
+let ho='<option value="">時</option>',mo='<option value="">分</option>';
+for(let h=0;h<24;h++){const v=String(h).padStart(2,'0');ho+=`<option value="${v}">${v}</option>`}
+for(let m=0;m<60;m++){const v=String(m).padStart(2,'0');mo+=`<option value="${v}">${v}</option>`}
+r.innerHTML=`<div class="km">${a[0].toFixed(1)} km</div><div class="place">${a[1]}${a[2]?`<small>${a[2]}</small>`:''}</div><div class="time24" data-km="${a[0]}"><select class="hh" aria-label="${a[1]} 到着時">${ho}</select><span>:</span><select class="mm" aria-label="${a[1]} 到着分">${mo}</select></div>`;list.appendChild(r)});
+const inputs=[...list.querySelectorAll('.time24')], goal=document.getElementById('goal'), status=document.getElementById('status');
+function fmt(m){m=Math.round(m);m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+function calc(){let best=null;for(const el of inputs){const hv=el.querySelector('.hh').value,mv=el.querySelector('.mm').value;if(hv===''||mv==='')continue;const mins=Number(hv)*60+Number(mv),km=Number(el.dataset.km);if(mins<=start)continue;if(!best||km>best.km)best={km,mins}}if(!best){goal.textContent='--:--';goal.className='time';status.textContent='エイドの到着時刻を入力してください';return}const elapsed=best.mins-start;const pace=elapsed/best.km;const predicted=start+pace*total;goal.textContent=fmt(predicted);const diff=cutoff-predicted;goal.className='time '+(diff>=0?'ok':'late');const paceMin=Math.floor(pace),paceSec=Math.round((pace-paceMin)*60);status.textContent=(diff>=0?`18:00まで約${Math.round(diff)}分の余裕`:`18:00を約${Math.round(-diff)}分超過する予測`)+` ／ 平均 ${paceMin}:${String(paceSec).padStart(2,'0')}/km`}
+inputs.forEach(x=>x.querySelectorAll('select').forEach(s=>s.addEventListener('change',calc)));document.getElementById('clear').addEventListener('click',()=>{inputs.forEach(x=>x.querySelectorAll('select').forEach(s=>s.value=''));calc()});calc();
 })();
 </script>
-
 <script>
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js', {updateViaCache:'none'})
-      .then(reg => reg.update())
-      .catch(console.error);
-  });
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(r=>r.update()).catch(console.error));
 }
 </script>
 </body>
